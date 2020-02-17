@@ -10,8 +10,6 @@ public interface UserMapper {
             "(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
     void insert(User user);
 
-    @Select(
-            "select * from user where id = #{id}"
-    )
-    void select(int id);
+    @Select("select * from user where token = #{token}")
+    User findUserByToken(String token);
 }

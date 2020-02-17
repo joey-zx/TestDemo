@@ -7,13 +7,13 @@ import com.joey.community.community.model.User;
 import com.joey.community.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -37,7 +37,7 @@ public class OauthController {
     @RequestMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletRequest httpServletRequest) {
+                           HttpServletResponse httpServletResponse) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
@@ -45,17 +45,18 @@ public class OauthController {
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setState(state);
         accessTokenDTO.setClient_secret(clientSecret);
-        String token = githubProvider.getAccessToken(accessTokenDTO);
-        GithubUser githubUser = githubProvider.getGithubUser(token);
+        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        GithubUser githubUser = githubProvider.getGithubUser(accessToken);
         if(githubUser != null) {
             User user = new User();
-            user.setToken(UUID.randomUUID().toString());
+            String token = UUID.randomUUID().toString();
+            user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            httpServletResponse.addCookie(new Cookie("token",token));
             userMapper.insert(user);
-            httpServletRequest.getSession().setAttribute("user",githubUser);
             return "redirect:/";
         } else {
             return "redirect:/";

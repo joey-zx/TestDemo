@@ -5,9 +5,13 @@ import com.joey.community.community.dto.GithubUser;
 import com.joey.community.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class OauthController {
@@ -26,7 +30,8 @@ public class OauthController {
 
     @RequestMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
-                           @RequestParam(name = "state") String state) {
+                           @RequestParam(name = "state") String state,
+                           HttpServletRequest httpServletRequest) {
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
@@ -36,8 +41,12 @@ public class OauthController {
         accessTokenDTO.setClient_secret(clientSecret);
         String token = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser user = githubProvider.getGithubUser(token);
-        System.out.println(user.getName());
-        return "index";
+        if(user != null) {
+            httpServletRequest.getSession().setAttribute("user",user);
+            return "redirect:/";
+        } else {
+            return "redirect:/";
+        }
     }
 
 }

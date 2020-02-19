@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Joey Community</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/publish.css">
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Joey Community</span>
+
+            </button>
+            <a class="navbar-brand" href="#">Joey Community</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="搜索话题">
+                </div>
+                <button type="submit" class="btn btn-default">搜索</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown" th:if="${session.user != null }">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false" th:text="${session.user.getName()}"> <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">消息中心</a></li>
+                        <li><a href="#">个人资料</a></li>
+                        <li><a href="#">退出登录</a></li>
+                    </ul>
+                </li>
+                <li th:if="${session.user == null }"><a
+                        href="https://github.com/login/oauth/authorize?client_id=Iv1.282f9fa17f8e7829&redirect_uri=http://localhost:8089/callback&scope=user&state=1">登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid margin">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                发起</h3>
+            <hr>
+            <form action="">
+                <div class="form-group">
+                    <label for="title">问题标题（简单扼要）：</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题...">
+                </div>
+
+                <div class="form-group">
+                    <label for="content">问题补充（必填，请参照右侧提示）：</label>
+                    <textarea id="content" class="form-control" name="content" cols="30" rows="10"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">添加标签：</label>
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="创建或添加新话题">
+                </div>
+
+                <button type="submit" class="btn btn-success btn">发布</button>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>相关问题</h3>
+            这个问题有点难？<br>
+            怎么解决elasticsearch集群占用太多虚拟内存(VIRT)的问题？占用了几十个G，有什么可以对它进行限制的相关设置吗？ <br>
+            请问大家，ES有没有限制搜索结果数的功能？ <br>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

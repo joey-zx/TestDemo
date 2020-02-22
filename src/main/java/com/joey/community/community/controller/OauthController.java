@@ -54,7 +54,7 @@ public class OauthController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            user.setAvatarURL(githubUser.getAvatar_url());
+            user.setAvatarURL(githubUser.getAvatarUrl());
             httpServletResponse.addCookie(new Cookie("token",token));
             userMapper.insert(user);
             return "redirect:/";

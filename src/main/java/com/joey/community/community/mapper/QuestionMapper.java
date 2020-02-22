@@ -3,6 +3,9 @@ package com.joey.community.community.mapper;
 import com.joey.community.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface QuestionMapper {
@@ -10,4 +13,7 @@ public interface QuestionMapper {
     @Insert("insert into publish (title,content,tag,gmt_create,gmt_modified,creator) " +
             "values(#{title},#{content},#{tag},#{gmtCreate},#{gmtModified},#{creator}) ")
     void create(Question question);
+
+    @Select("Select * from publish")
+    List<Question> list();
 }

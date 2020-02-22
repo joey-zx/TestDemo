@@ -1,13 +1,28 @@
-body{
+body {
     background-color: #efefef;
 }
 
-.margin{
+.margin {
     margin: 30px;
     background: white;
 }
 
-.publish-btn{
+.publish-btn {
     float: right;
     margin-bottom: 20px;
+}
+
+.img-desc {
+    width: 40px;
+    height: 40px;
+}
+
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
+
+.header-block{
+    font-weight: bold;
 }

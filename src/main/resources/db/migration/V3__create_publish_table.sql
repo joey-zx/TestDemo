@@ -5,7 +5,7 @@ create table publish
 	content text,
 	tag varchar(256),
 	gmt_create long,
-	gmt_modified int,
+	gmt_modified long,
 	creator int,
 	comment_count int,
 	view_count int not null,

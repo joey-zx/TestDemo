@@ -46,7 +46,9 @@ public class OauthController {
         accessTokenDTO.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
-        if(githubUser != null) {
+        User realUser = userMapper.findUserByAccountId(githubUser.getId());
+
+        if(githubUser != null && realUser == null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
@@ -59,6 +61,8 @@ public class OauthController {
             userMapper.insert(user);
             return "redirect:/";
         } else {
+            String token = realUser.getToken();
+            httpServletResponse.addCookie(new Cookie("token",token));
             return "redirect:/";
         }
     }

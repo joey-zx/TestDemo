@@ -19,4 +19,10 @@ public interface QuestionMapper {
 
     @Select("select count(1) from publish")
     Integer count();
+
+    @Select("Select * from publish where creator = #{userId} limit #{offset},#{size}")
+    List<Question> listById(Integer userId, Integer offset, Integer size);
+
+    @Select("select count(1) from publish where creator = #{userId}")
+    Integer countById(Integer userId);
 }

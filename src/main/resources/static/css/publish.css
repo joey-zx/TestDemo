@@ -26,3 +26,7 @@ body {
 .header-block{
     font-weight: bold;
 }
+
+.profile .section {
+    margin-top: 20px;
+}

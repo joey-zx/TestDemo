@@ -14,6 +14,9 @@ public interface QuestionMapper {
             "values(#{title},#{content},#{tag},#{gmtCreate},#{gmtModified},#{creator}) ")
     void create(Question question);
 
-    @Select("Select * from publish")
-    List<Question> list();
+    @Select("Select * from publish limit #{offset},#{size}")
+    List<Question> list(Integer offset, Integer size);
+
+    @Select("select count(1) from publish")
+    Integer count();
 }

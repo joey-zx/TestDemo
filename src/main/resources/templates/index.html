@@ -54,7 +54,7 @@
                 发现</h3>
             <hr>
 
-            <div class="media" th:each="question:${questionDTOList}">
+            <div class="media" th:each="question:${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="img-rounded img-desc" th:src="${question.user.avatarURL}">
@@ -67,8 +67,44 @@
                         <span th:text="${question.commentCount}"></span> 个回复 •
                         <span th:text="${question.viewCount}"></span> 次浏览 •
                         <span th:text="${#dates.format(question.gmtCreate,'dd MMMM yyyy')}"></span></span>
-                 </div>
+                </div>
             </div>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+
+                    <li th:if="${pagination.isShowFirstPage()}">
+                        <a href="/?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <li th:if="${pagination.isShowPrevious()}">
+                        <a th:href="@{/(page=${pagination.page - 1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+
+                    <li th:each="page: ${pagination.pages}" th:class="${pagination.page == page} ? 'active': ''">
+                        <a th:href="@{/(page=${page})}" th:text="${page}">
+
+                        </a>
+                    </li>
+
+                    <li th:if="${pagination.isShowNext()}">
+                        <a th:href="@{/(page=${pagination.page + 1})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+
+                    <li th:if="${pagination.isShowNext()}">
+                        <a th:href="@{/(page=${pagination.getTotalPage()})}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">

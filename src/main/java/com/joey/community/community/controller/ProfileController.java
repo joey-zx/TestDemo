@@ -1,5 +1,4 @@
 package com.joey.community.community.controller;
-
 import com.joey.community.community.dto.PaginationDTO;
 import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.User;
@@ -10,8 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -30,21 +27,8 @@ public class ProfileController {
                           Model model,
                           HttpServletRequest request) {
 
-        User user = null;
 
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findUserByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
 
         if(user == null) {
             return "redirect:/";

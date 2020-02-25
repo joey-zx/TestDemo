@@ -25,4 +25,7 @@ public interface QuestionMapper {
 
     @Select("select count(1) from publish where creator = #{userId}")
     Integer countById(Integer userId);
+
+    @Select("Select * from publish where id = #{id}")
+    Question findById(Integer id);
 }

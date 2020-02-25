@@ -5,6 +5,7 @@ import com.joey.community.community.dto.GithubUser;
 import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.User;
 import com.joey.community.community.provider.GithubProvider;
+import com.joey.community.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class OauthController {
     private GithubProvider githubProvider;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     @Value("${GitHub.client.id}")
     private String clientId;
@@ -46,7 +47,7 @@ public class OauthController {
         accessTokenDTO.setClient_secret(clientSecret);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
-        User realUser = userMapper.findUserByAccountId(githubUser.getId());
+        User realUser = userService.findUserByAccountId(githubUser.getId().toString());
 
         if(githubUser != null && realUser == null) {
             User user = new User();
@@ -57,10 +58,14 @@ public class OauthController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarURL(githubUser.getAvatarUrl());
+            userService.insert(user);
             httpServletResponse.addCookie(new Cookie("token",token));
-            userMapper.insert(user);
             return "redirect:/";
         } else {
+            realUser.setAvatarURL(githubUser.getAvatarUrl());
+            realUser.setName(githubUser.getName());
+            realUser.setGmtModified(System.currentTimeMillis());
+            userService.update(realUser);
             String token = realUser.getToken();
             httpServletResponse.addCookie(new Cookie("token",token));
             return "redirect:/";

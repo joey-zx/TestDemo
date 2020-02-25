@@ -1,9 +1,11 @@
 package com.joey.community.community.controller;
 
+import com.joey.community.community.dto.QuestionDTO;
 import com.joey.community.community.mapper.QuestionMapper;
 import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.Question;
 import com.joey.community.community.model.User;
+import com.joey.community.community.service.QuestionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +24,17 @@ public class PublishController {
     private QuestionMapper questionMapper;
 
     @Autowired
+    private QuestionService questionService;
+
+    @Autowired
     private UserMapper userMapper;
 
     @RequestMapping("/publish/{id}")
-    public String publishByid(@PathVariable(name = "id") Integer id) {
+    public String publishById(@PathVariable(name = "id") Integer id,
+                              Model model) {
 
-
-
+        QuestionDTO question = questionService.findQuestionById(id);
+        model.addAttribute("question",question);
         return "publish";
     }
 

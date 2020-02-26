@@ -4,6 +4,7 @@ import com.joey.community.community.model.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -28,4 +29,7 @@ public interface QuestionMapper {
 
     @Select("Select * from publish where id = #{id}")
     Question findById(Integer id);
+
+    @Update("update publish set title=#{title},content=#{content},tag=#{tag},gmt_modified=#{gmtModified} where id = #{id}")
+    void update(Question question);
 }

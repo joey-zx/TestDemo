@@ -15,19 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.rtf.RTFEditorKit;
 
 @Controller
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
-
-    @Autowired
     private QuestionService questionService;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @RequestMapping("/publish/{id}")
     public String publishById(@PathVariable(name = "id") Integer id,
@@ -35,6 +28,11 @@ public class PublishController {
 
         QuestionDTO question = questionService.findQuestionById(id);
         model.addAttribute("question",question);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("content",question.getContent());
+        model.addAttribute("tag",question.getTag());
+        model.addAttribute("id",question.getId());
+
         return "publish";
     }
 
@@ -47,12 +45,14 @@ public class PublishController {
     public String doPublish(@RequestParam(name = "title",required = false) String title,
                             @RequestParam(name = "content" ,required = false) String content,
                             @RequestParam(name = "tag" , required = false) String tag,
+                            @RequestParam(name = "id",required = false) Integer id,
                             HttpServletRequest request,
                             Model model) {
 
         model.addAttribute("title",title);
         model.addAttribute("content",content);
         model.addAttribute("tag",tag);
+
 
         if(StringUtils.isBlank(title)) {
             model.addAttribute("error","Title不能为空");
@@ -81,9 +81,8 @@ public class PublishController {
         question.setTag(tag);
         question.setTitle(title);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        questionMapper.create(question);
+        question.setId(id);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

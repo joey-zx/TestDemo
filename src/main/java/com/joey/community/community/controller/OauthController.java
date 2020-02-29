@@ -57,12 +57,12 @@ public class OauthController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
-            user.setAvatarURL(githubUser.getAvatarUrl());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userService.insert(user);
             httpServletResponse.addCookie(new Cookie("token",token));
             return "redirect:/";
         } else {
-            realUser.setAvatarURL(githubUser.getAvatarUrl());
+            realUser.setAvatarUrl(githubUser.getAvatarUrl());
             realUser.setName(githubUser.getName());
             realUser.setGmtModified(System.currentTimeMillis());
             userService.update(realUser);

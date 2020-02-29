@@ -18,6 +18,7 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Integer id,
                            Model model) {
 
+        questionService.updateReadingCountById(id);
         QuestionDTO questionDTO = questionService.findQuestionById(id);
         model.addAttribute("question",questionDTO);
         return "question";

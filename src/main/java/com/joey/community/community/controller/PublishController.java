@@ -1,8 +1,6 @@
 package com.joey.community.community.controller;
 
 import com.joey.community.community.dto.QuestionDTO;
-import com.joey.community.community.mapper.QuestionMapper;
-import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.Question;
 import com.joey.community.community.model.User;
 import com.joey.community.community.service.QuestionService;

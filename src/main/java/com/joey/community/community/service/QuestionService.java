@@ -2,6 +2,9 @@ package com.joey.community.community.service;
 
 import com.joey.community.community.dto.PaginationDTO;
 import com.joey.community.community.dto.QuestionDTO;
+import com.joey.community.community.exception.CustomizeException;
+import com.joey.community.community.exception.CustomizeExceptionCode;
+import com.joey.community.community.mapper.QuestionExtMapper;
 import com.joey.community.community.mapper.QuestionMapper;
 import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.Question;
@@ -24,6 +27,9 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private PaginationUtil paginationUtil;
@@ -72,11 +78,21 @@ public class QuestionService {
 
     public QuestionDTO findQuestionById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null) {
+            throw new CustomizeException(CustomizeExceptionCode.QUESTION_EXCEPTION_MESSAGE);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         User user = userMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setUser(user);
         BeanUtils.copyProperties(question,questionDTO);
         return questionDTO;
+    }
+
+    public void updateReadingCountById(int id) {
+        Question updateQuestion = new Question();
+        updateQuestion.setViewCount(1);
+        updateQuestion.setId(id);
+        questionExtMapper.incView(updateQuestion);
     }
 
     public void createOrUpdate(Question question) {
@@ -92,7 +108,10 @@ public class QuestionService {
             updateQuestion.setTag(question.getTag());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            int i = questionMapper.updateByExampleSelective(updateQuestion,questionExample);
+            if(i == 0) {
+                throw new CustomizeException(CustomizeExceptionCode.QUESTION_EXCEPTION_MESSAGE);
+            }
         }
     }
 }

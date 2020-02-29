@@ -10,6 +10,7 @@
 [GitHub Oauth](https://developer.github.com/apps/building-github-apps/creating-a-github-app/)
 [Spring document](https://docs.spring.io/spring-boot/docs/2.3.0.BUILD-SNAPSHOT/reference/html/spring-boot-features.html#boot-features)
 [mybatis document](http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/index.html)
+[Spring Boot document](https://docs.spring.io/spring-boot/docs/2.1.0.RC1/reference/htmlsingle/#boot-features-resttemplate-customization)
 ## tool
 [Git](https://git-scm.com/download)
 [Visual Paradigm](https://www.visual-paradigm.com)

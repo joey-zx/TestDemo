@@ -1,5 +1,6 @@
 package com.joey.community.community.controller;
 
+import com.joey.community.community.dto.CommentCreateDTO;
 import com.joey.community.community.dto.CommentDTO;
 import com.joey.community.community.dto.ResultDTO;
 import com.joey.community.community.exception.CustomizeExceptionCode;
@@ -22,7 +23,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public ResultDTO post(@RequestBody CommentDTO commentDTO, HttpServletRequest request) {
+    public ResultDTO post(@RequestBody CommentCreateDTO commentCreateDTO, HttpServletRequest request) {
 
         User user = (User)request.getSession().getAttribute("user");
 
@@ -30,9 +31,9 @@ public class CommentController {
             return ResultDTO.errorOf(CustomizeExceptionCode.NO_LGGIN);
         }
         Comment comment = new Comment();
-        comment.setContent(commentDTO.getContent());
-        comment.setType(commentDTO.getType());
-        comment.setParentId(commentDTO.getParentId());
+        comment.setContent(commentCreateDTO.getContent());
+        comment.setType(commentCreateDTO.getType());
+        comment.setParentId(commentCreateDTO.getParentId());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(comment.getGmtCreate());
         comment.setComentator(user.getId());

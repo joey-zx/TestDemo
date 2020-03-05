@@ -1,13 +1,14 @@
 package com.joey.community.community.controller;
 
 import com.joey.community.community.dto.CommentCreateDTO;
-import com.joey.community.community.dto.CommentDTO;
 import com.joey.community.community.dto.ResultDTO;
 import com.joey.community.community.exception.CustomizeExceptionCode;
 import com.joey.community.community.model.Comment;
 import com.joey.community.community.model.User;
 import com.joey.community.community.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,11 @@ public class CommentController {
         if(user == null) {
             return ResultDTO.errorOf(CustomizeExceptionCode.NO_LGGIN);
         }
+
+        if(commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
+            return ResultDTO.errorOf(CustomizeExceptionCode.NO_REPLY_COMMENT);
+        }
+
         Comment comment = new Comment();
         comment.setContent(commentCreateDTO.getContent());
         comment.setType(commentCreateDTO.getType());

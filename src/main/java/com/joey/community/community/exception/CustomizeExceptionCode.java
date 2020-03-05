@@ -10,7 +10,8 @@ public enum CustomizeExceptionCode implements ICustomizeException {
     SYSTEM_ERROR(2004,"系统内部错误,请稍后再试"),
     TYPE_PARAM_WRONG(2005,"评论类型错误或不存在"),
     COMMENT_NOT_FOUND(2006,"你评论的问题不存在"),
-    QUESTION_NOT_FOUND(2007,"你的问题不存在");
+    QUESTION_NOT_FOUND(2007,"你的问题不存在"),
+    NO_REPLY_COMMENT(2008,"请输入你需要回复的内容");
 
     private final Integer code;
     private final String message;

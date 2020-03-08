@@ -4,10 +4,7 @@ import com.joey.community.community.dto.CommentDTO;
 import com.joey.community.community.enums.CommentTypeEnum;
 import com.joey.community.community.exception.CustomizeException;
 import com.joey.community.community.exception.CustomizeExceptionCode;
-import com.joey.community.community.mapper.CommentMapper;
-import com.joey.community.community.mapper.QuestionExtMapper;
-import com.joey.community.community.mapper.QuestionMapper;
-import com.joey.community.community.mapper.UserMapper;
+import com.joey.community.community.mapper.*;
 import com.joey.community.community.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,9 @@ public class CommentService {
     private QuestionExtMapper questionExtMapper;
 
     @Autowired
+    private CommentExtMapper commentExtMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Transactional(propagation = Propagation.REQUIRED,timeout = 60)
@@ -52,6 +52,12 @@ public class CommentService {
                 throw new CustomizeException(CustomizeExceptionCode.COMMENT_NOT_FOUND);
             } else {
                 commentMapper.insert(comment);
+
+                //增加评论数
+                Comment parentComment = new Comment();
+                parentComment.setId(comment.getParentId());
+                parentComment.setCommentCount(1);
+                commentExtMapper.incCommentCount(parentComment);
             }
         } else {
             // reply question
@@ -66,11 +72,11 @@ public class CommentService {
         }
     }
 
-    public List<CommentDTO> listCommentByParentId(Integer id) {
+    public List<CommentDTO> listCommentByTargetId(Integer id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id)
-                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
-
+                .andTypeEqualTo(type.getType());
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
 
         // Query the all commet users Id

@@ -48,6 +48,17 @@ body {
     margin:10px 0
 }
 
+.sub-comment {
+    margin-top: 15px;
+    border-radius: 15px;
+    border: solid 1px #eee;
+    margin-bottom: 15px;
+}
+
+.sub-comment .btn {
+    margin:10px 0;
+}
+
 .comment-sp{
     margin-top:20px
 }
@@ -67,9 +78,14 @@ body {
     color: #499ef3;
 }
 
+.menu .active {
+    color: #499ef3;
+}
+
 .content-section {
+    margin-top:20px;
     padding-bottom: 10px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     border-bottom: 1px solid #eee;
 }
 

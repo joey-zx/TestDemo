@@ -30,8 +30,12 @@ public class QuestionController {
 
         List<CommentDTO> comments = commentService.listCommentByTargetId(id, CommentTypeEnum.QUESTION);
         QuestionDTO questionDTO = questionService.findQuestionById(id);
+
+        List<QuestionDTO> relatedQuestions = questionService.findRelatedQuestionsByTag(questionDTO);
+
         model.addAttribute("question",questionDTO);
         model.addAttribute("comments",comments);
+        model.addAttribute("relatedQuestions",relatedQuestions);
         return "question";
     }
 

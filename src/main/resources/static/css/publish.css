@@ -92,3 +92,23 @@ body {
 .title-to {
     margin-top:-8px;
 }
+
+.tag{
+    margin-bottom:15px;
+}
+
+.tag .tag-margin{
+    margin-right: 5px;
+}
+
+.question-related {
+    line-height: 20px;
+    font-size: 12px;
+    margin-left:0;
+    list-style:none;
+    padding-left: 0;
+}
+
+.img-definition{
+    width:100%;
+}

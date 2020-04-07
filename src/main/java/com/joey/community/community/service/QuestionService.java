@@ -17,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -116,5 +118,23 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeExceptionCode.QUESTION_EXCEPTION_MESSAGE);
             }
         }
+    }
+
+    public List<QuestionDTO> findRelatedQuestionsByTag(QuestionDTO questionDTO) {
+
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        String[] tag = questionDTO.getTag().split(",");
+        String regTag = Arrays.stream(tag).collect(Collectors.joining("|"));
+        question.setTag(regTag);
+        List<Question> questionDTOList = questionExtMapper.selectRelatedByTag(question);
+
+        List<QuestionDTO> questionDTOLists = questionDTOList.stream().map(q -> {
+            QuestionDTO queryDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q, queryDTO);
+            return queryDTO;
+        }).collect(Collectors.toList());
+
+        return questionDTOLists;
     }
 }

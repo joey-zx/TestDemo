@@ -6,15 +6,14 @@ import com.joey.community.community.exception.CustomizeException;
 import com.joey.community.community.exception.CustomizeExceptionCode;
 import com.joey.community.community.mapper.*;
 import com.joey.community.community.model.*;
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,7 +92,6 @@ public class CommentService {
 
         // transfer the user object from list to map
         Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
-
 
         // return the commentDTO
         List<CommentDTO> commentDTOList = comments.stream().map(comment -> {

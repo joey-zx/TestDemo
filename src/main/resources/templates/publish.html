@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/publish.css">
     <script src="/js/jquery-3.3.1.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/comment.js" type="application/javascript"></script>
 </head>
 <body>
 
@@ -23,21 +24,45 @@
                 <input type="hidden" th:value="${id}" name="id">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）：</label>
-                    <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="问题标题...">
+                    <input type="text" class="form-control" id="title" name="title" th:value="${title}"
+                           placeholder="问题标题..."
+                           autocomplete="off">
                 </div>
 
                 <div class="form-group">
                     <label for="content">问题补充（必填，请参照右侧提示）：</label>
-                    <textarea id="content" class="form-control" name="content" th:text="${content}" cols="30" rows="10"></textarea>
+                    <textarea id="content" class="form-control" name="content" th:text="${content}" cols="30" rows="10"
+                              autocomplete="off"></textarea>
                 </div>
 
-                              <div class="form-group">
+                <div class="form-group">
                     <label for="title">添加标签：</label>
-                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="创建或添加新话题">
+                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="创建或添加新话题"
+                           autocomplete="off" onclick="showSelectTag()">
+                </div>
+
+                <div id="select-tag" class="publish-top-tag">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" th:each="tagSingle,tagSingleStat : ${tags}" th:class="${tagSingleStat.first ? 'active':''}">
+                            <a th:href="${'#' + tagSingle.categoryName.replace(' ','')}" aria-controls="home" role="tab"
+                               data-toggle="tab" th:text="${tagSingle.categoryName}"></a></li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane" th:id="${selectSingleTag.categoryName.replace(' ','')}"
+                             th:each="selectSingleTag,selectSingleTagStat : ${tags}" th:class="${selectSingleTagStat.first ? 'tab-pane active': 'tab-pane'}">
+                            <span class="label label-info tag-info" th:each="single : ${selectSingleTag.tags}">
+                                <span class="glyphicon glyphicon-tags" onclick="selectTag(this)" th:data-tag="${single}"
+                                      th:text="${single}"></span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="container-fluid">
-                    <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}"></div>
+                    <div class="alert alert-danger col-lg-9 col-md-12 col-sm-12 col-xs-12" th:text="${error}"
+                         th:if="${error != null}"></div>
                     <div>
                         <button type="submit" class="btn btn-success publish-btn">发布</button>
                     </div>

@@ -2,7 +2,6 @@ package com.joey.community.community.controller;
 
 import com.joey.community.community.dto.AccessTokenDTO;
 import com.joey.community.community.dto.GithubUser;
-import com.joey.community.community.mapper.UserMapper;
 import com.joey.community.community.model.User;
 import com.joey.community.community.provider.GithubProvider;
 import com.joey.community.community.service.UserService;

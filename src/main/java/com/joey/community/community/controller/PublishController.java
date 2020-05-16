@@ -1,5 +1,6 @@
 package com.joey.community.community.controller;
 
+import com.joey.community.community.cache.TagCache;
 import com.joey.community.community.dto.QuestionDTO;
 import com.joey.community.community.model.Question;
 import com.joey.community.community.model.User;
@@ -30,12 +31,14 @@ public class PublishController {
         model.addAttribute("content",question.getContent());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",question.getId());
+        model.addAttribute("tags", TagCache.get());
 
         return "publish";
     }
 
     @RequestMapping(value = "/publish",method = {RequestMethod.GET})
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -50,8 +53,7 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("content",content);
         model.addAttribute("tag",tag);
-
-
+        model.addAttribute("tags", TagCache.get());
         if(StringUtils.isBlank(title)) {
             model.addAttribute("error","Title不能为空");
             return "publish";
@@ -64,6 +66,13 @@ public class PublishController {
 
         if(StringUtils.isBlank(tag)) {
             model.addAttribute("error","tag不能为空");
+            return "publish";
+        }
+
+        String validTag = TagCache.isInvalid(tag);
+
+        if(StringUtils.isNotBlank(validTag)) {
+            model.addAttribute("error","非法的标签" + validTag);
             return "publish";
         }
 

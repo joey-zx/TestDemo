@@ -41,6 +41,21 @@ function commentPost(targetId, content, type) {
     });
 }
 
+
+/**
+ * 点赞功能
+ */
+
+function likeCount(e) {
+    var commentId = e.getAttribute("data");
+    var likeCount = e.innerText;
+    $('#comment-' + commentId)[0].innerText = parseInt(likeCount) + 1;
+
+    $.getJSON("/comment/like/" + commentId, function (data) {
+       $('comment-' + commentId).val(parseInt(likeCount) + 1);
+    });
+}
+
 /**
  * 二级评论展开
  */
@@ -99,4 +114,20 @@ function collapseComment(e) {
         e.setAttribute("collapse", "in");
         e.classList.add("active");
     }
+}
+
+function selectTag(val) {
+    var previous = $("#tag").val();
+
+    if (previous.indexOf(val) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + val.innerText);
+        } else {
+            $("#tag").val(val.innerText);
+        }
+    }
+}
+
+function showSelectTag() {
+    $("#select-tag").show();
 }

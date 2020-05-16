@@ -2,11 +2,12 @@ package com.joey.community.community.service;
 
 import com.joey.community.community.dto.CommentDTO;
 import com.joey.community.community.enums.CommentTypeEnum;
+import com.joey.community.community.enums.NotificationStatusEnum;
+import com.joey.community.community.enums.NotificationTypeEnum;
 import com.joey.community.community.exception.CustomizeException;
 import com.joey.community.community.exception.CustomizeExceptionCode;
 import com.joey.community.community.mapper.*;
 import com.joey.community.community.model.*;
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,20 +35,23 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
-    @Transactional(propagation = Propagation.REQUIRED,timeout = 60)
+    @Autowired
+    private NotificationMapper notificationMapper;
+
+    @Transactional(propagation = Propagation.REQUIRED, timeout = 60)
     public void insert(Comment comment) {
-        if(comment.getParentId() == null || comment.getParentId() == 0) {
+        if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeExceptionCode.NO_QUESTION_COMMENT);
         }
 
-        if(comment.getType() == null || !CommentTypeEnum.isExists(comment.getType())) {
+        if (comment.getType() == null || !CommentTypeEnum.isExists(comment.getType())) {
             throw new CustomizeException(CustomizeExceptionCode.TYPE_PARAM_WRONG);
         }
 
-        if(comment.getType() == CommentTypeEnum.COMMENT.getType()) {
+        if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             // reply comment
             Comment dbcomment = commentMapper.selectByPrimaryKey(comment.getParentId());
-            if(dbcomment == null) {
+            if (dbcomment == null) {
                 throw new CustomizeException(CustomizeExceptionCode.COMMENT_NOT_FOUND);
             } else {
                 commentMapper.insert(comment);
@@ -58,6 +62,8 @@ public class CommentService {
                 parentComment.setCommentCount(1);
                 commentExtMapper.incCommentCount(parentComment);
             }
+            createNotification(comment, dbcomment.getComentator(), NotificationTypeEnum.NOTIFYCOMMENT);
+
         } else {
             // reply question
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -68,7 +74,19 @@ public class CommentService {
                 question.setCommentCount(1);
                 questionExtMapper.incCommentCount(question);
             }
+            createNotification(comment, question.getCreator(), NotificationTypeEnum.NOTIFYQUESTION);
         }
+    }
+
+    private void createNotification(Comment comment, int receiver, NotificationTypeEnum NotificationType) {
+        Notification notification = new Notification();
+        notification.setNotifier(comment.getComentator());
+        notification.setReceiver(receiver);
+        notification.setOuterId(comment.getParentId());
+        notification.setGmtCreater(System.currentTimeMillis());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setType(NotificationType.getType());
+        notificationMapper.insert(notification);
     }
 
     public List<CommentDTO> listCommentByTargetId(Integer id, CommentTypeEnum type) {
@@ -76,7 +94,7 @@ public class CommentService {
         commentExample.createCriteria().andParentIdEqualTo(id)
                 .andTypeEqualTo(type.getType());
         commentExample.setOrderByClause("gmt_create desc");
-        List<Comment> comments = commentMapper.selectByExample(commentExample);
+        List<Comment> comments = commentMapper.selectByExampleWithBLOBs(commentExample);
 
         // Query the all commet users Id
         List<Integer> userIds = comments.stream().map(comment -> comment.getComentator()).distinct().collect(Collectors.toList());
@@ -84,7 +102,7 @@ public class CommentService {
         UserExample userExample = new UserExample();
         userExample.createCriteria().andIdIn(userIds);
         List<User> users;
-        if(userIds.size() > 0) {
+        if (userIds.size() > 0) {
             users = userMapper.selectByExample(userExample);
         } else {
             users = new ArrayList<User>();
@@ -102,5 +120,13 @@ public class CommentService {
         }).collect(Collectors.toList());
 
         return commentDTOList;
+    }
+
+    public void saveLikeCount(Integer id) {
+        CommentExample example = new CommentExample();
+        example.createCriteria().andIdEqualTo(id);
+        Comment comment = commentMapper.selectByExample(example).get(0);
+        comment.setLikeCount(comment.getLikeCount() + 1);
+        commentMapper.updateByExample(comment,example);
     }
 }

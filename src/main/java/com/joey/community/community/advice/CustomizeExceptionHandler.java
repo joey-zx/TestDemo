@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.joey.community.community.dto.ResultDTO;
 import com.joey.community.community.exception.CustomizeException;
 import com.joey.community.community.exception.CustomizeExceptionCode;
-import com.sun.xml.internal.ws.encoding.ContentTypeImpl;
-import org.springframework.objenesis.instantiator.basic.NewInstanceInstantiator;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,7 +34,7 @@ public class CustomizeExceptionHandler {
                 PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(resultDTO));
             } catch (IOException e) {
-
+                e.printStackTrace();
             }
             return null;
         } else {

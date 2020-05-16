@@ -1,7 +1,5 @@
 package com.joey.community.community.enums;
 
-import javax.xml.ws.Service;
-
 public enum CommentTypeEnum {
     QUESTION(1),
     COMMENT(2);

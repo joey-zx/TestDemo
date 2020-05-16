@@ -34,7 +34,7 @@ public class CustomizeExceptionHandler {
                 PrintWriter writer = response.getWriter();
                 writer.write(JSON.toJSONString(resultDTO));
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
             return null;
         } else {

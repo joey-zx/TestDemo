@@ -5,8 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PaginationDTO {
-    private List<QuestionDTO> questions;
+public class PaginationDTO<E> {
+    private List<E> data;
     private boolean showPrevious;
     private boolean showFirstPage;
     private boolean showNext;

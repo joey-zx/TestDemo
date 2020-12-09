@@ -30,7 +30,7 @@ public class CommentController {
 
         if(user == null) {
             return ResultDTO.errorOf(CustomizeExceptionCode.NO_LGGIN);
-        }
+    }
 
         if(commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
             return ResultDTO.errorOf(CustomizeExceptionCode.NO_REPLY_COMMENT);

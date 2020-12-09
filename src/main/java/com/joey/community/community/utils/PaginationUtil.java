@@ -1,6 +1,7 @@
 package com.joey.community.community.utils;
 
 import com.joey.community.community.dto.PaginationDTO;
+import com.joey.community.community.model.Question;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +10,11 @@ import java.util.List;
 
 @Component
 @Data
-public class PaginationUtil {
-    private PaginationDTO paginationDTO;
+public class PaginationUtil<E> {
+    private PaginationDTO<E> paginationDTO;
+
+
+
 
     public void setPagination(Integer totalCount, Integer page, Integer size) {
         Integer totalPage;

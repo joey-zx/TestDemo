@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.joey.community.community.mapper")
 public class CommunityApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CommunityApplication.class, args);
-    }
+        public static void main(String[] args) {
+            SpringApplication.run(CommunityApplication.class, args);
+        }
 
 }

@@ -6,7 +6,7 @@ public enum CustomizeExceptionCode implements ICustomizeException {
 
     QUESTION_EXCEPTION_MESSAGE(2001,"你要找的问题不存在，请换一个试试？"),
     NO_QUESTION_COMMENT(2002,"请选择你需要回复的主题"),
-    NO_LGGIN(2003,"用户为登录，请登录后再试"),
+    NO_LGGIN(2003,"用户未登录，请登录后再试"),
     SYSTEM_ERROR(2004,"系统内部错误,请稍后再试"),
     TYPE_PARAM_WRONG(2005,"评论类型错误或不存在"),
     COMMENT_NOT_FOUND(2006,"你评论的问题不存在"),
